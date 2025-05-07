@@ -11,7 +11,7 @@ template<typename T>
 class FTween
 {
 public:
-	explicit FTween(const TSharedPtr<SWidget> InWidget, TFunction<void(T)> InUpdateFunction, const float InDuration = 1.0f, const EasingFunction Ease = FEase::Linear(), const float InDelay = 0.0f) :
+	explicit FTween(const TWeakPtr<SWidget> InWidget, TFunction<void(T)> InUpdateFunction, const float InDuration = 1.0f, const EasingFunction Ease = FEase::Linear(), const float InDelay = 0.0f) :
 		Widget(InWidget),
 		UnrealObject(nullptr),
 		UpdateFunction(InUpdateFunction),
@@ -52,7 +52,7 @@ public:
 			};
 
 			const FWidgetActiveTimerDelegate Fct = FWidgetActiveTimerDelegate::CreateLambda(Lambda);
-			ActiveTimerHandle = Widget.Get()->RegisterActiveTimer(0.f, Fct);
+			ActiveTimerHandle = Widget.Pin()->RegisterActiveTimer(0.f, Fct);
 		}
 		else if (UnrealObject.IsValid())
 		{
@@ -77,9 +77,9 @@ public:
 	
 	void Stop()
 	{
-		if (Widget.IsValid() && ActiveTimerHandle.IsValid())
+		if (Widget.IsValid() && Widget.Pin().IsValid() && ActiveTimerHandle.IsValid())
 		{
-			Widget->UnRegisterActiveTimer(ActiveTimerHandle.Pin().ToSharedRef());
+			Widget.Pin()->UnRegisterActiveTimer(ActiveTimerHandle.Pin().ToSharedRef());
 		}
 		else if (UnrealObject.IsValid())
 		{
@@ -130,7 +130,7 @@ public:
 	}
 
 private:
-	TSharedPtr<SWidget> Widget;
+	TWeakPtr<SWidget> Widget;
 	TWeakObjectPtr<> UnrealObject;
 	
 	TWeakPtr<FActiveTimerHandle> ActiveTimerHandle;
