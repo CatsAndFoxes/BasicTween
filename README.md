@@ -21,9 +21,9 @@
 Animate the scale of an in-game actor (with a lambda):
 
 ```cpp
-FTween<FVector>(TWeakObjectPtr<>(Actor),
-  [Actor](FVector Value){
-    Actor->SetActorScale3D(Value);
+FTween<FVector>(TWeakObjectPtr<>(MyActor),
+  [MyActor](FVector Value){
+    MyActor->SetActorScale3D(Value);
   },
   0.5f,
   FEase::ElasticOut()
@@ -38,10 +38,10 @@ FTween<FVector>(TWeakObjectPtr<>(Actor),
 Animate button scaling for dynamic visual feedback:
 
 ```cpp
-FTween<float>(Button, [&, Button](const float InScale) {
-    const FVector2D Size = Button->GetDesiredSize();
+FTween<float>(MyButton, [&, MyButton](const float InScale) {
+    const FVector2D Size = MyButton->GetDesiredSize();
     const FVector2D Translation = FVector2D((1.0f - InScale) * 0.5f * Size.X, (1.0f - InScale) * 0.5f * Size.Y);
-    Button->SetRenderTransform(FSlateRenderTransform(FScale2D(InScale), Translation));
+    MyButton->SetRenderTransform(FSlateRenderTransform(FScale2D(InScale), Translation));
 }, 0.25f, FEase::ExponentialOut(), Delay).From(0.3f).To(1.0f).Start();
 ```
 
@@ -52,7 +52,7 @@ Create engaging opening animations for dialog panels:
 ```cpp
 void SDialogPanel::Open()
 {
-  FTween TweenOpen = FTween(MainWidget, AnimateOpenClose(), 0.3f, FEase::BackOut());
+  FTween TweenOpen = FTween(MyWidget, AnimateOpenClose(), 0.3f, FEase::BackOut());
   TweenOpen.From(FVector2D(0.3f, 0.f)).To(FVector2D(1.f, 1.f)).Start();
 }
 
@@ -61,10 +61,10 @@ TFunction<void(FVector2D)> SDialogPanel::AnimateOpenClose()
 {
 	return [&](const FVector2D CurrentScale)
 	{
-		Size = MainWidget->GetDesiredSize();
+		Size = MyWidget->GetDesiredSize();
 		const FVector2D Translation = FVector2d((1.0f - CurrentScale.X) * 0.5f * Size.X, (1.0f - CurrentScale.X) * 0.5f * Size.Y);
-		MainWidget->SetRenderTransform(FSlateRenderTransform(FScale2D(CurrentScale.X), Translation));
-		MainWidget->SetRenderOpacity(CurrentScale.Y);
+		MyWidget->SetRenderTransform(FSlateRenderTransform(FScale2D(CurrentScale.X), Translation));
+		MyWidget->SetRenderOpacity(CurrentScale.Y);
 	};
 }
 ```
@@ -81,10 +81,10 @@ if (LocalRenderTransform.IsSet()) {
     FromScale = LocalRenderTransform->GetMatrix().GetScale().GetVector().X;
 }
 
-FVector2D InSize = Box->GetCachedGeometry().GetLocalSize();
+FVector2D InSize = MyWidget->GetCachedGeometry().GetLocalSize();
 
-FTween<float>(Box, [&, InSize](const float InScale) {
-    Box->SetRenderTransform(FSlateRenderTransform(FScale2D(InScale), 0.5f * InSize * (1.0f - InScale)));
+FTween<float>(MyWidget, [&, InSize](const float InScale) {
+    MyWidget->SetRenderTransform(FSlateRenderTransform(FScale2D(InScale), 0.5f * InSize * (1.0f - InScale)));
 }, 0.25f, FEase::SineOut()).From(FromScale).To(TargetScale).Start();
 ```
 
