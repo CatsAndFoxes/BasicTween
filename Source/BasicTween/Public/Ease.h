@@ -235,7 +235,7 @@ public:
     {
         return [](const float Alpha) 
         {
-            return FMath::Sqrt(1.f - FMath::Square(Alpha));
+            return FMath::Sqrt(1.f - FMath::Square(Alpha - 1.f));
         };
     }
 
@@ -246,11 +246,11 @@ public:
             float Value = 2.f * Alpha;
             if (Value < 1.0f)
             {
-                return 0.5f * FMath::Sqrt(1.f - FMath::Square(Value)) - 1.f;
+                return 0.5f * (FMath::Sqrt(1.f - FMath::Square(Value)) - 1.f);
             }
             
             Value -= 2.f;
-            return 0.5f * (FMath::Sqrt(1.f - FMath::Square(Value)) + 1.f);
+            return 0.5f * (FMath::Sqrt(1.f - FMath::Square(Value - 1.f)) + 1.f);
         };
     }
 
