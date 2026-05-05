@@ -98,10 +98,10 @@ public:
 
 		if (Time > Duration) 
 		{
-			UponCompletion.ExecuteIfBound();
 			CurrentValue = TargetValue;
 			UpdateFunction(TargetValue);
-			
+			UponCompletion.ExecuteIfBound();
+
 			return EActiveTimerReturnType::Stop;
 		}
 
@@ -149,5 +149,3 @@ private:
 
 	FSimpleDelegate UponCompletion;
 };
-
-
