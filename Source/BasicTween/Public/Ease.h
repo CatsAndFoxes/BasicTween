@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Ease.generated.h"
 
 UENUM()
 enum class Ease
